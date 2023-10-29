@@ -8,6 +8,7 @@ import brickImg from "./assets/wall.png";
 import { CELL, GRID, MOVE } from "./constants";
 
 type Pos = { x: number; y: number };
+
 const checkIfWon = ({ grid }: { grid: typeof GRID }) => {
   for (const row of grid) {
     for (const cell of row) {
@@ -125,9 +126,18 @@ const isMovePossible = ({
   return { newPlayerPos };
 };
 
+const findStartingPlayerPosInGrid = () => {
+  for (let x = 0; x < GRID.length; ++x) {
+    for (let y = 0; y < GRID[0].length; ++y) {
+      if (GRID[x][y].includes("PLAYER")) return { x, y } as Pos;
+    }
+  }
+  return { x: 0, y: 0 };
+};
+
 function App() {
   const [grid, setGrid] = useState(GRID);
-  const [pos, setPos] = useState<Pos>({ x: 0, y: 0 });
+  const [pos, setPos] = useState<Pos>(() => findStartingPlayerPosInGrid());
   const [won, setWon] = useState(false);
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -174,7 +184,7 @@ function App() {
       });
     }
     setGrid(newGrid);
-     setWon(checkIfWon({ grid: newGrid }));
+    setWon(checkIfWon({ grid: newGrid }));
 
     setPos(newPlayerPos);
   };
@@ -205,7 +215,11 @@ function App() {
                   <div className="w-5 h-5 absolute bg-red-200 rounded-md m-5" />
                 )}
                 {c.includes("DOT") && c.includes("BOX") && (
-                  <img className="w-16 h-16 absolute" src={filledBoxImg} alt="" />
+                  <img
+                    className="w-16 h-16 absolute"
+                    src={filledBoxImg}
+                    alt=""
+                  />
                 )}
               </div>
             ))}
