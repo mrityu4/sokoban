@@ -19,7 +19,7 @@ type Pos = { x: number; y: number };
 function App() {
   const [grid, setGrid] = useState(GRID);
   const [pos, setPos] = useState<Pos>(() => findStartingPlayerPosInGrid());
-  const [won, setWon] = useState(true);
+  const [won, setWon] = useState(false);
   const divRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
